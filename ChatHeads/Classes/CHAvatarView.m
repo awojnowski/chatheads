@@ -40,6 +40,8 @@
 
 -(void)sharedInit {
     
+    [self setClipsToBounds:YES];
+    
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOffset = CGSizeMake(0,2);
     self.layer.shadowRadius = 2;
@@ -57,7 +59,7 @@
     [super layoutSubviews];
     
     [_imageView setFrame:[self bounds]];
-    [[_imageView layer] setCornerRadius:CGRectGetHeight([self bounds]) / 2.0];
+    [[self layer] setCornerRadius:CGRectGetHeight([self bounds]) / 2.0];
     
 }
 
