@@ -8,67 +8,65 @@
 #import "CHAvatarView.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation CHAvatarView
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
+@implementation CHAvatarView {
+    
+    UIImageView *_imageView;
+    
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
+-(id)init {
+    
+    self = [super init];
+    if (self) {
+        
+        [self sharedInit];
+        
+    }
+    return self;
+    
+}
+
+-(id)initWithFrame:(CGRect)frame {
+    
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.layer.shadowColor = [UIColor blackColor].CGColor;
-        self.layer.shadowOffset = CGSizeMake(0,2);
-        self.layer.shadowRadius = 2;
-        self.layer.shadowOpacity = 0.7f;
+        [self sharedInit];
+        
     }
     return self;
+    
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-    CGRect b = self.bounds;
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
+-(void)sharedInit {
     
-    CGContextSaveGState(ctx);
-
-    CGPathRef circlePath = CGPathCreateWithEllipseInRect(b, 0);
-    CGMutablePathRef inverseCirclePath = CGPathCreateMutableCopy(circlePath);
-    CGPathAddRect(inverseCirclePath, nil, CGRectInfinite);
+    self.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(0,2);
+    self.layer.shadowRadius = 2;
+    self.layer.shadowOpacity = 0.7f;
     
-    CGContextSaveGState(ctx); {
-        CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, circlePath);
-        CGContextClip(ctx);
-        [_image drawInRect:b];
-    } CGContextRestoreGState(ctx);
+    _imageView = [[UIImageView alloc] init];
+    [_imageView setClipsToBounds:YES];
+    [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+    [self addSubview:_imageView];
     
-    CGContextSaveGState(ctx); {
-        CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, circlePath);
-        CGContextClip(ctx);
-        
-        CGContextSetShadowWithColor(ctx, CGSizeMake(0, 0), 3.0f, [UIColor colorWithRed:0.994 green:0.989 blue:1.000 alpha:1.0f].CGColor);
-        
-        CGContextBeginPath(ctx);
-        CGContextAddPath(ctx, inverseCirclePath);
-        CGContextEOFillPath(ctx);
-    } CGContextRestoreGState(ctx);
-    
-    CGPathRelease(circlePath);
-    CGPathRelease(inverseCirclePath);
-    
-    CGContextRestoreGState(ctx);
 }
 
+-(void)layoutSubviews {
+    
+    [super layoutSubviews];
+    
+    [_imageView setFrame:[self bounds]];
+    [[_imageView layer] setCornerRadius:CGRectGetHeight([self bounds]) / 2.0];
+    
+}
+
+-(void)setImage:(UIImage *)image {
+    
+    _image = image;
+    
+    [_imageView setImage:image];
+    
+}
 
 @end
